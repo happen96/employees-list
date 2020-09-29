@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EmployeesService } from './employees.service';
 import { HEADERS_LABELS } from '../../constants/app-header-labels';
 import { FormModalService } from '../form-modal/form-modal.service';
@@ -140,7 +140,7 @@ export class ListEmployeesComponent implements OnInit {
     this.modalService.close(id);
   }
 
-  get employeeId() {
+  get employeeId(): number {
     return this.form.get('id').value;
   }
 }
