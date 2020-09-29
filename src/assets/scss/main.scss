@@ -1,0 +1,35 @@
+@import "variables";
+
+html,
+body {
+  height: 100%;
+}
+ul, li {
+  list-style: none;
+}
+a, p, ul, li {
+  padding: 0;
+  margin: 0;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+a:hover {
+  text-decoration: none;
+  opacity: .8;
+}
+
+h3, h4 {
+  text-transform: capitalize;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+.no-margin {
+  margin: 0 !important;
+}
+button {
+  width: 250px;
+}

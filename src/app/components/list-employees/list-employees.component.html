@@ -1,0 +1,108 @@
+<div>
+  <table class="w-100" *ngIf="listEmployees.length; else noEmployees">
+    <tr class="border-bottom border-dark" *ngIf="headerLabels.length">
+      <th class="text-center pt-3 pb-3" *ngFor="let label of headerLabels">{{label}}</th>
+    </tr>
+    <tr class="trow" *ngFor="let emp of listEmployees; let i = index">
+      <td class="text-center p-2">
+        <input type="checkbox" [checked]="emp.available" (change)="selectEmployee($event, emp.id)">
+      </td>
+      <td class="text-center p-2">{{emp.id}}</td>
+      <td class="text-center p-2">{{emp.firstName}} {{emp.lastName}}</td>
+      <td class="text-center p-2">{{emp.role}}</td>
+      <td class="text-center p-2">{{emp.workLocation}}</td>
+      <td class="text-center p-2">{{emp.email}}</td>
+      <td class="text-center p-2">{{emp.phone}}</td>
+      <td class="text-center p-2">{{emp.hourlyRate}}</td>
+    </tr>
+  </table>
+
+  <ng-template #noEmployees>
+    <h2 class="text-center">We can't find any employees</h2>
+  </ng-template>
+
+  <div class="action-buttons d-flex mt-3 mb-3">
+      <button
+        class="btn btn-primary text-uppercase mr-3"
+        (click)="openModal('custom-modal-add')">Add employee
+      </button>
+
+      <button
+        class="btn btn-outline-dark text-uppercase mr-3"
+        [disabled]="!selectedEmployee"
+        (click)="openModal('custom-modal-edit')">Edit
+      </button>
+
+      <button
+        class="btn btn-outline-danger text-uppercase"
+        [disabled]="!selectedEmployee"
+        (click)="deleteEmployee()">Delete
+      </button>
+  </div>
+</div>
+
+<div *ngIf="modalIds.length">
+  <div class="modal-wrap" *ngFor="let modal of modalIds">
+    <app-form-modal id="{{modal}}" >
+      <form class="form-group" [formGroup]="form" (ngSubmit)="addNewEmployee(modal)">
+        <h3>{{returnAction(modal)}} Employee</h3>
+
+        <p>Personal</p>
+        <div class="form-control">
+          <label>First Name:</label>
+          <input formControlName="firstName" type="text">
+        </div>
+        <div class="form-control">
+          <label>Last Name:</label>
+          <input formControlName="lastName" type="text">
+        </div>
+        <div class="form-control">
+          <label>Login:</label>
+          <input formControlName="login" type="text">
+        </div>
+
+        <p>Personal</p>
+        <div class="form-control">
+          <label>Work Phone:</label>
+          <input formControlName="workPhone" type="text">
+        </div>
+        <div class="form-control">
+          <label>Personal Phone:</label>
+          <input formControlName="phone" type="text">
+        </div>
+        <div class="form-control">
+          <label>Work Email:</label>
+          <input type="text">
+        </div>
+        <div class="form-control">
+          <label>Personal Email:</label>
+          <input formControlName="email" type="text">
+        </div>
+
+        <p>Employment</p>
+        <div class="form-control">
+          <label>Business Location:</label>
+          <input formControlName="workLocation" type="text">
+        </div>
+        <div class="form-control">
+          <label>Company:</label>
+          <input formControlName="company" type="text">
+        </div>
+        <div class="form-control">
+          <label>Role:</label>
+          <input formControlName="role" type="text">
+        </div>
+        <div class="form-control">
+          <label>Hourly Rate:</label>
+          <input formControlName="hourlyRate" type="text">
+        </div>
+        <div class="row align-items-center justify-content-center mt-2">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <button class="close" (click)="closeModal(modal);">&times;</button>
+      </form>
+    </app-form-modal>
+  </div>
+</div>
+
+

@@ -1,0 +1,80 @@
+@import "../../../assets/scss/variables";
+
+app-form-modal {
+  display: none;
+
+  .form-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    overflow: auto;
+    .form-modal-body {
+      padding: 20px;
+      background: $second-bg-color;
+      width: 60%;
+      position: relative;
+    }
+  }
+  .form-modal-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: $total-black;
+    opacity: 0.75;
+    z-index: 900;
+  }
+  label {
+    text-align: left;
+    font: normal normal medium 20px/56px Rubik;
+    letter-spacing: -0.4px;
+    color: $calendar-label-text;
+  }
+  input {
+    text-align: left;
+    font: normal normal medium 22px/56px Rubik;
+    letter-spacing: 0.66px;
+    color: $nav-links-color;
+    padding: 14px 0 13px 20px;
+  }
+  button.close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: $nav-links-color;
+    padding: 1px 7px;
+    width: unset;
+    opacity: 1;
+    &:hover {
+      opacity: .7;
+    }
+  }
+}
+
+body.form-modal-open {
+  overflow: hidden;
+}
+
+.form-control {
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  input {
+    padding: 0;
+  }
+}
+.form-group {
+  p {
+    padding-bottom: 10px;
+    border-bottom: 1px solid grey;
+    text-transform: uppercase;
+  }
+}
