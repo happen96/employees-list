@@ -1,4 +1,4 @@
-<div>
+<div class="main-wrap">
   <table class="w-100" *ngIf="listEmployees.length; else noEmployees">
     <tr class="border-bottom border-dark" *ngIf="headerLabels.length">
       <th class="text-center pt-3 pb-3" *ngFor="let label of headerLabels">{{label}}</th>
@@ -7,13 +7,15 @@
       <td class="text-center p-2">
         <input type="checkbox" [checked]="emp.available" (change)="selectEmployee($event, emp.id)">
       </td>
-      <td class="text-center p-2">{{emp.id}}</td>
-      <td class="text-center p-2">{{emp.firstName}} {{emp.lastName}}</td>
-      <td class="text-center p-2">{{emp.role}}</td>
-      <td class="text-center p-2">{{emp.workLocation}}</td>
-      <td class="text-center p-2">{{emp.email}}</td>
-      <td class="text-center p-2">{{emp.phone}}</td>
-      <td class="text-center p-2">{{emp.hourlyRate}}</td>
+      <td class="text-center p-2" title="{{emp.id}}">{{emp.id}}</td>
+      <td class="text-center p-2" title="{{emp.firstName}} {{emp.lastName}}">
+        {{emp.firstName}} {{emp.lastName}}
+      </td>
+      <td class="text-center p-2" title="{{emp.role}}">{{emp.role}}</td>
+      <td class="text-center p-2" title="{{emp.workLocation}}">{{emp.workLocation}}</td>
+      <td class="text-center p-2" title="{{emp.email}}">{{emp.email}}</td>
+      <td class="text-center p-2" title="{{emp.phone}}">{{emp.phone}}</td>
+      <td class="text-center p-2" title="{{emp.hourlyRate}}">{{emp.hourlyRate}}</td>
     </tr>
   </table>
 
@@ -21,14 +23,14 @@
     <h2 class="text-center">We can't find any employees</h2>
   </ng-template>
 
-  <div class="action-buttons d-flex mt-3 mb-3">
+  <div class="action-buttons d-flex mt-md-3 mb-md-3">
       <button
-        class="btn btn-primary text-uppercase mr-3"
+        class="btn btn-primary text-uppercase mr-md-3"
         (click)="openModal('custom-modal-add')">Add employee
       </button>
 
       <button
-        class="btn btn-outline-dark text-uppercase mr-3"
+        class="btn btn-outline-dark text-uppercase mr-md-3"
         [disabled]="!selectedEmployee"
         (click)="openModal('custom-modal-edit')">Edit
       </button>
@@ -50,52 +52,104 @@
         <p>Personal</p>
         <div class="form-control">
           <label>First Name:</label>
-          <input formControlName="firstName" type="text">
+          <div class="alert-danger"
+               *ngIf="form.get('firstName').invalid && form.get('firstName').touched">
+            Field is required
+          </div>
+          <input formControlName="firstName" type="text" placeholder="John">
         </div>
+
         <div class="form-control">
           <label>Last Name:</label>
-          <input formControlName="lastName" type="text">
+          <div class="alert-danger"
+               *ngIf="form.get('lastName').invalid && form.get('lastName').touched">
+            Field is required
+          </div>
+          <input formControlName="lastName" type="text" placeholder="Smith">
         </div>
+
         <div class="form-control">
           <label>Login:</label>
-          <input formControlName="login" type="text">
+          <div class="alert-danger"
+               *ngIf="form.get('login').invalid && form.get('login').touched">
+            Field is required
+          </div>
+          <input formControlName="login" type="text" placeholder="Secure Name">
         </div>
+
 
         <p>Personal</p>
         <div class="form-control">
           <label>Work Phone:</label>
-          <input formControlName="workPhone" type="text">
+          <div class="alert-danger"
+               *ngIf="form.get('workPhone').invalid && form.get('workPhone').touched
+               || form.get('workPhone').errors?.pattern">
+            Invalid phone number
+          </div>
+          <input formControlName="workPhone" type="text" placeholder="+380 33 333 33 33">
         </div>
+
         <div class="form-control">
           <label>Personal Phone:</label>
-          <input formControlName="phone" type="text">
+          <div class="alert-danger"
+               *ngIf="form.get('phone').invalid && form.get('phone').touched
+               || form.get('phone').errors?.pattern">
+            Invalid phone number
+          </div>
+          <input formControlName="phone" type="text" placeholder="+380 33 333 33 33">
         </div>
+
         <div class="form-control">
           <label>Work Email:</label>
-          <input type="text">
+          <div *ngIf="form.get('workEmail').invalid && form.get('workEmail').touched">
+            Email is required
+          </div>
+          <input formControlName="workEmail" type="text" placeholder="mail@gmail">
         </div>
+
         <div class="form-control">
           <label>Personal Email:</label>
-          <input formControlName="email" type="text">
+          <div class="alert-danger"
+               *ngIf="form.get('email').invalid && form.get('email').touched">
+            Email is required
+          </div>
+          <input formControlName="email" type="text" placeholder="mail@gmail">
         </div>
+
 
         <p>Employment</p>
         <div class="form-control">
           <label>Business Location:</label>
-          <input formControlName="workLocation" type="text">
+          <div class="alert-danger"
+               *ngIf="form.get('workLocation').invalid && form.get('workLocation').touched">
+            Field is required
+          </div>
+          <input formControlName="workLocation" type="text" placeholder="London">
         </div>
+
         <div class="form-control">
           <label>Company:</label>
-          <input formControlName="company" type="text">
+          <input formControlName="company" type="text" placeholder="Google">
         </div>
+
         <div class="form-control">
           <label>Role:</label>
-          <input formControlName="role" type="text">
+          <div class="alert-danger"
+               *ngIf="form.get('role').invalid && form.get('role').touched">
+            Field is required
+          </div>
+          <input formControlName="role" type="text" placeholder="Developer" >
         </div>
+
         <div class="form-control">
           <label>Hourly Rate:</label>
-          <input formControlName="hourlyRate" type="text">
+          <div class="alert-danger"
+               *ngIf="form.get('hourlyRate').invalid && form.get('hourlyRate').touched">
+            Field is required
+          </div>
+          <input formControlName="hourlyRate" type="text" placeholder="h/r">
         </div>
+
         <div class="row align-items-center justify-content-center mt-2">
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>

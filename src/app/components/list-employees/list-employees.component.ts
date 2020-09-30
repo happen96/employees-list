@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeesService } from './employees.service';
-import { HEADERS_LABELS } from '../../constants/app-header-labels';
 import { FormModalService } from '../form-modal/form-modal.service';
-import { MODAL_IDS } from '../../constants/app-modal-Ids';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Employee } from '../../models/employee';
+import { HEADERS_LABELS, MODAL_IDS, PHONE_REGEX_PATTERN } from '../../constants/app.constants';
 
 @Component({
   selector: 'app-list-employees',
   templateUrl: './list-employees.component.html',
-  styles: [`tr.trow:nth-child(odd) {background-color: rgba(84,163,255, .1);}`]
+  styleUrls: ['./list-employees.scss']
 })
 export class ListEmployeesComponent implements OnInit {
 
@@ -20,6 +19,7 @@ export class ListEmployeesComponent implements OnInit {
   listEmployees: Employee[];
   selectedEmployee: any;
   actionEdit = 'edit';
+  phoneValidationPattern = PHONE_REGEX_PATTERN;
 
   constructor(
     private employeesService: EmployeesService,
@@ -28,17 +28,19 @@ export class ListEmployeesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.setListToStore();
     this.getEmployees();
+    this.setListToStore();
     this.createForm();
-  }
-
-  private setListToStore(): void {
-    this.employeesService.setListToLocaleStorage();
   }
 
   private getEmployees(): void {
     this.listEmployees = this.employeesService.getListEmployees();
+  }
+
+  private setListToStore(): void {
+    if (!this.listEmployees) {
+      this.employeesService.setListToLocaleStorage();
+    }
   }
 
   private addNewEmployee(modalId): void {
@@ -55,7 +57,7 @@ export class ListEmployeesComponent implements OnInit {
   }
 
   private creatEmployeeId(): void {
-    this.form.get('id').patchValue(this.listEmployees.length);
+    this.form.get('id').patchValue(this.listEmployees.length + 1);
   }
 
   private updateEmployee(): void {
@@ -79,6 +81,16 @@ export class ListEmployeesComponent implements OnInit {
     });
   }
 
+  deleteEmployee(): void {
+    this.listEmployees.map((employee, index) => {
+      if (employee.id === this.selectedEmployee.id) {
+        this.employeesService.deleteEmployee(this.selectedEmployee);
+        this.listEmployees.splice(index, 1);
+        this.selectedEmployee = null;
+      }
+    });
+  }
+
   returnAction(modalId): string {
     const action = modalId.split('-');
     return action[action.length - 1];
@@ -87,12 +99,12 @@ export class ListEmployeesComponent implements OnInit {
   createForm(): void {
     this.form = this.fb.group({
       id: '',
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      login: ['', Validators.required],
-      phone: ['', Validators.required],
-      workPhone: '',
-      workEmail: '',
+      firstName: ['', [Validators.required, Validators.minLength(3)]],
+      lastName: ['',  [Validators.required, Validators.minLength(2)]],
+      login: ['',  [Validators.required, Validators.minLength(3)]],
+      phone: ['', Validators.pattern(this.phoneValidationPattern)],
+      workPhone: ['', Validators.pattern(this.phoneValidationPattern)],
+      workEmail: ['', Validators.required],
       email: ['', Validators.required],
       workLocation: ['', Validators.required],
       company: '',
@@ -117,15 +129,6 @@ export class ListEmployeesComponent implements OnInit {
       role: this.selectedEmployee.role,
       hourlyRate: this.selectedEmployee.hourlyRate,
       available: this.selectedEmployee.available
-    });
-  }
-
-  deleteEmployee(): void {
-    this.listEmployees.map((employee, index) => {
-      if (employee.id === this.selectedEmployee.id) {
-        this.employeesService.deleteEmployee(this.selectedEmployee);
-        this.listEmployees.splice(index, 1);
-      }
     });
   }
 

@@ -35,7 +35,7 @@ app-form-modal {
     text-align: left;
     font: normal normal medium 20px/56px Rubik;
     letter-spacing: -0.4px;
-    color: $calendar-label-text;
+    color: $modal-text;
   }
   input {
     text-align: left;
@@ -76,5 +76,31 @@ body.form-modal-open {
     padding-bottom: 10px;
     border-bottom: 1px solid grey;
     text-transform: uppercase;
+  }
+}
+
+
+@media (max-width: 1180px) {
+  .form-control {
+      width: 90%;
+  }
+}
+
+@media (max-width: 767px) {
+  .form-modal-body {
+    width: 85%;
+  }
+  .form-control {
+    width: 90%;
+    padding: 0;
+    margin: 0 auto;
+    position: relative;
+  }
+  label {
+    display: none;
+  }
+  .alert-danger {
+    position: absolute;
+    top: -20px;
   }
 }

@@ -1,0 +1,52 @@
+.main-wrap {
+  overflow: hidden;
+}
+tr.trow:nth-child(odd) {
+  background-color: rgba(84,163,255, .1);
+}
+
+td {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+@media (max-width: 1025px) {
+  td {
+    max-width: 175px;
+  }
+}
+
+@media (max-width: 995px) {
+  td {
+    max-width: 120px;
+    font-size: 12px;
+  }
+}
+
+
+@media (max-width: 767px) {
+  th {
+    font-size: 12px;
+  }
+  td {
+    max-width: 82px;
+  }
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    margin-top: 20px;
+    button {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  td {
+    max-width: 50px;
+    font-size: 10px;
+  }
+}
