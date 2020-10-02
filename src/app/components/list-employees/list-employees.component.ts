@@ -19,6 +19,7 @@ export class ListEmployeesComponent implements OnInit {
   listEmployees: Employee[];
   selectedEmployee: any;
   actionEdit = 'edit';
+  actionAdd = 'add';
   phoneValidationPattern = PHONE_REGEX_PATTERN;
 
   constructor(
@@ -39,14 +40,14 @@ export class ListEmployeesComponent implements OnInit {
   }
 
   private setListToStore(): void {
-    if (!this.isAvailableList) {
+    if (!this.isAvailableList()) {
       this.employeesService.setListToLocaleStorage();
       this.getEmployees();
     }
   }
 
   private setSelectedEmployees(): void {
-    if (this.isAvailableList) {
+    if (this.isAvailableList()) {
       this.listEmployees.map((employee) => {
         if (employee.available) {
           this.selectedEmployee = employee;
@@ -73,21 +74,27 @@ export class ListEmployeesComponent implements OnInit {
   }
 
   private updateEmployee(): void {
-    this.listEmployees.map((employee) => {
+    const result: Employee[] = this.listEmployees.map((employee) => {
       if (employee.id === this.selectedEmployee.id) {
         employee = this.form.value;
       }
+      return employee;
     });
-    this.employeesService.updateEmployee(this.listEmployees);
+    this.employeesService.updateEmployee(result);
   }
 
-  private updateStateOfSelected(): void {
-    this.listEmployees.map((employee) => {
-      if (employee.id === this.selectedEmployee.id) {
-        employee = this.selectedEmployee;
+  private updateStateOfSelected(): any {
+    const resultArr: Employee[] = this.listEmployees.map((employee: Employee) => {
+      if (this.selectedEmployee) {
+        if (employee.id === this.selectedEmployee.id) {
+          employee = this.selectedEmployee;
+        }
+      } else {
+        employee.available = false;
       }
+      return employee;
     });
-    this.employeesService.updateEmployee(this.listEmployees);
+    this.employeesService.updateEmployee(resultArr);
   }
 
   selectEmployee(element, employeeId): void {
@@ -100,9 +107,7 @@ export class ListEmployeesComponent implements OnInit {
         this.selectedEmployee = null;
       }
     });
-    if (this.selectedEmployee) {
-      this.updateStateOfSelected();
-    }
+    this.updateStateOfSelected();
   }
 
   deleteEmployee(): void {
@@ -156,19 +161,27 @@ export class ListEmployeesComponent implements OnInit {
     });
   }
 
+  clearForm(): void {
+    this.form.reset();
+    this.createForm();
+  }
+
   openModal(id: string): void {
-    this.modalService.open(id);
     if (this.returnAction(id) === this.actionEdit) {
       this.updateForm();
     }
+    if (this.returnAction(id) === this.actionAdd) {
+      this.clearForm();
+    }
+    this.modalService.open(id);
   }
 
   closeModal(id: string): void {
     this.modalService.close(id);
   }
 
-  isAvailableList() {
-    this.listEmployees && this.listEmployees.length;
+  isAvailableList(): any {
+    return this.listEmployees && this.listEmployees.length;
   }
 
   get employeeId(): number {
