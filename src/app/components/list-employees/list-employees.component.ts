@@ -30,6 +30,7 @@ export class ListEmployeesComponent implements OnInit {
   ngOnInit(): void {
     this.getEmployees();
     this.setListToStore();
+    this.setSelectedEmployees();
     this.createForm();
   }
 
@@ -38,9 +39,19 @@ export class ListEmployeesComponent implements OnInit {
   }
 
   private setListToStore(): void {
-    if (!this.listEmployees) {
+    if (!this.isAvailableList) {
       this.employeesService.setListToLocaleStorage();
       this.getEmployees();
+    }
+  }
+
+  private setSelectedEmployees(): void {
+    if (this.isAvailableList) {
+      this.listEmployees.map((employee) => {
+        if (employee.available) {
+          this.selectedEmployee = employee;
+        }
+      });
     }
   }
 
@@ -154,6 +165,10 @@ export class ListEmployeesComponent implements OnInit {
 
   closeModal(id: string): void {
     this.modalService.close(id);
+  }
+
+  isAvailableList() {
+    this.listEmployees && this.listEmployees.length;
   }
 
   get employeeId(): number {
