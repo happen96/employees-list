@@ -40,6 +40,7 @@ export class ListEmployeesComponent implements OnInit {
   private setListToStore(): void {
     if (!this.listEmployees) {
       this.employeesService.setListToLocaleStorage();
+      this.getEmployees();
     }
   }
 
@@ -62,8 +63,17 @@ export class ListEmployeesComponent implements OnInit {
 
   private updateEmployee(): void {
     this.listEmployees.map((employee) => {
-      if (employee.id === this.selectedEmployee) {
+      if (employee.id === this.selectedEmployee.id) {
         employee = this.form.value;
+      }
+    });
+    this.employeesService.updateEmployee(this.listEmployees);
+  }
+
+  private updateStateOfSelected(): void {
+    this.listEmployees.map((employee) => {
+      if (employee.id === this.selectedEmployee.id) {
+        employee = this.selectedEmployee;
       }
     });
     this.employeesService.updateEmployee(this.listEmployees);
@@ -72,13 +82,16 @@ export class ListEmployeesComponent implements OnInit {
   selectEmployee(element, employeeId): void {
     this.listEmployees.map((employee) => {
       employee.id === employeeId && element.target.checked
-        ? employee.available = true
-        : employee.available = false;
+        ? (employee.available = true, this.selectedEmployee = employee)
+        : (employee.available = false);
 
-      element.target.checked
-        ? this.selectedEmployee = employee
-        : this.selectedEmployee = null;
+      if (!element.target.checked) {
+        this.selectedEmployee = null;
+      }
     });
+    if (this.selectedEmployee) {
+      this.updateStateOfSelected();
+    }
   }
 
   deleteEmployee(): void {

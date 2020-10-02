@@ -26,6 +26,7 @@
   <div class="action-buttons d-flex mt-md-3 mb-md-3">
       <button
         class="btn btn-primary text-uppercase mr-md-3"
+        [disabled]="selectedEmployee"
         (click)="openModal('custom-modal-add')">Add employee
       </button>
 
